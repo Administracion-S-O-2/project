@@ -1,0 +1,9 @@
+/var/log/remote/*.log {
+    daily
+    rotate 7
+    compress
+    maxsize 1G
+    missingok
+    notifempty
+    create 0644 root root
+}
