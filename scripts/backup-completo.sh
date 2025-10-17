@@ -1,4 +1,5 @@
 #!/bin/bash
+
 DATE=$(date +%Y%m%d_%H%M%S)
 destino_backup_bd="/home/root/backup/monthly/BD"
 origen_backup_bd="/var/lib/mysql/CoopHogar"
@@ -40,16 +41,15 @@ Backup_logs() {
     fi
 }
 
-
-If mysqlEstaActivo() then
-systemctl stop mysql
-Backup_bd
-Backup_logs 
-systemctl start mysql
+if mysqlEstaActivo; then
+    systemctl stop mysql
+    Backup_bd
+    Backup_logs 
+    systemctl start mysql
 else
-Backup_bd
-Backup_logs 
+    Backup_bd
+    Backup_logs 
 fi
 
-echo "Backup incremental realizado el $DATE" >> "$LOG_FILE
+echo "Backup completo realizado el $DATE" >> "$LOG_FILE"
 
