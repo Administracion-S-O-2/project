@@ -80,13 +80,13 @@ services:
       - cooperativa-network
       
   backoffice:
-    image: php:8.2-cli
+    image: webdevops/php-nginx:8.2
     container_name: Backoffice
-    working_dir: /var/www                       
+    working_dir: /app              
     ports:
       - "3003:8000"
     volumes:
-      - /root/Backoffice:/var/www             
+      - /root/Backoffice:/app             
     environment:
       DB_CONNECTION: mysql
       DB_HOST: db
