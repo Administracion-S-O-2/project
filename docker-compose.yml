@@ -79,14 +79,14 @@ services:
       
   backoffice:
     image: webdevops/php-nginx:8.2
-    container_name: Backoffice
+    container_name: backoffice
     working_dir: /app              
     ports:
       - "3003:80"
     volumes:
       - /root/BackOffice:/app          
-      - /root/nginx-config/backoffice.conf:/opt/docker/etc/nginx/vhost.conf
     environment:
+      WEB_DOCUMENT_ROOT: /app/public
       DB_CONNECTION: mysql
       DB_HOST: db
       DB_PORT: 3306
