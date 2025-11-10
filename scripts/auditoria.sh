@@ -32,7 +32,7 @@ opciones(){
         0) salir ;;
         *) echo "Opcion invalida" ;;
 
-        if [[ "$1" -ne 0 ]]; then
+        if "$1" -ne 0; then
             echo ""
             read -p "Presiona ENTER para volver al menu..."
         fi
