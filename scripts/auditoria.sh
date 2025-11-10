@@ -31,12 +31,12 @@ opciones(){
         10) promedio_carga_sistema ;;
         0) salir ;;
         *) echo "Opcion invalida" ;;
-
-        if true; then
-            echo ""
-            read -p "Presiona ENTER para volver al menu..."
-        fi
     esac
+
+    if true; then
+        echo ""
+        read -p "Presiona ENTER para volver al menu..."
+    fi
 }
 
 usuarios_presentes(){
