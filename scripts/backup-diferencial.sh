@@ -1,7 +1,7 @@
 #!/bin/bash
 
 destino_backup_bd="/home/root/backup/monthly/BD"
-origen_backup_bd="/var/lib/mysql/CoopHogar"
+origen_backup_bd="/var/lib/mysql"
 origen_dir_logs="/var/log/journal"
 destino_backup_logs="/home/root/backup/monthly/logs"
 DATE=$(date +%Y%m%d_%H%M%S)
