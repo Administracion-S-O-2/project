@@ -1,11 +1,13 @@
 #!/bin/bash
 
-destino_backup_bd="/home/root/backup/monthly/BD"
+destino_backup_bd="/home/root/project/backup/monthly/BD"
 origen_backup_bd="/var/lib/mysql"
+
+destino_backup_logs="/home/root/project/backup/monthly/logs"
 origen_dir_logs="/var/log/journal"
-destino_backup_logs="/home/root/backup/monthly/logs"
+
 DATE=$(date +%Y%m%d_%H%M%S)
-LOG_FILE="/home/root/backup/backup.log"
+LOG_FILE="/home/root/project/backup/backup.log"
 
 mysqlEstaActivo() {
     if systemctl is-active --quiet mysql; then
@@ -52,4 +54,4 @@ else
     Backup_logs
 fi
 
-echo "$(date): Backup diferencial realizado el $DATE" >> "$LOG_FILE"
+echo "Backup DIFERENCIAL realizado el $DATE" >> "$LOG_FILE"
