@@ -1,61 +1,79 @@
 #!/bin/bash
 
-echo "=== Test de Backup ==="
-echo ""
-
-# Variables
-DATE=$(date +%Y%m%d_%H%M%S)
 LOG_FILE="/root/project/backup/backup.log"
-TEST_DIR="/root/project/backup/test"
-
-# Crear directorio de log
 mkdir -p "$(dirname "$LOG_FILE")"
-touch "$LOG_FILE"
 
-echo "1. Verificando permisos de escritura en log..."
-if echo "Test $(date)" >> "$LOG_FILE"; then
-    echo "   ✓ Log funciona correctamente"
+echo "=== Test de Backup ===" | tee -a "$LOG_FILE"
+echo "" | tee -a "$LOG_FILE"
+
+echo "1. Verificando permisos de escritura en log..." | tee -a "$LOG_FILE"
+if echo "Test $(date)" >> "$LOG_FILE" 2>&1; then
+    echo "   ✓ Log funciona correctamente" | tee -a "$LOG_FILE"
+    echo "   Ubicación: $LOG_FILE" | tee -a "$LOG_FILE"
 else
     echo "   ✗ No se puede escribir en el log"
     exit 1
 fi
 
-echo ""
-echo "2. Verificando MySQL..."
-if systemctl is-active --quiet mysql; then
-    echo "   ✓ MySQL está activo"
+echo "" | tee -a "$LOG_FILE"
+echo "2. Verificando MySQL/MariaDB..." | tee -a "$LOG_FILE"
+if systemctl is-active --quiet mysqld 2>/dev/null; then
+    echo "   ✓ mysqld está activo" | tee -a "$LOG_FILE"
+    MYSQL_RUNNING=true
+elif systemctl is-active --quiet mysql 2>/dev/null; then
+    echo "   ✓ mysql está activo" | tee -a "$LOG_FILE"
+    MYSQL_RUNNING=true
 else
-    echo "   ✗ MySQL NO está activo o no está instalado"
+    echo "   ✗ MySQL NO está activo o no está instalado" | tee -a "$LOG_FILE"
+    MYSQL_RUNNING=false
 fi
 
-echo ""
-echo "3. Verificando directorio de MySQL..."
+echo "" | tee -a "$LOG_FILE"
+echo "3. Verificando directorio de MySQL..." | tee -a "$LOG_FILE"
 if [ -d "/var/lib/mysql" ]; then
-    echo "   ✓ /var/lib/mysql existe"
-    echo "   Archivos: $(ls -1 /var/lib/mysql | wc -l)"
+    FILES=$(ls -1 /var/lib/mysql 2>/dev/null | wc -l)
+    SIZE=$(du -sh /var/lib/mysql 2>/dev/null | cut -f1)
+    echo "   ✓ /var/lib/mysql existe" | tee -a "$LOG_FILE"
+    echo "   Archivos: $FILES" | tee -a "$LOG_FILE"
+    echo "   Tamaño: $SIZE" | tee -a "$LOG_FILE"
 else
-    echo "   ✗ /var/lib/mysql NO existe"
+    echo "   ✗ /var/lib/mysql NO existe" | tee -a "$LOG_FILE"
 fi
 
-echo ""
-echo "4. Verificando directorio de logs del sistema..."
+echo "" | tee -a "$LOG_FILE"
+echo "4. Verificando directorio de logs del sistema..." | tee -a "$LOG_FILE"
 if [ -d "/var/log/journal" ]; then
-    echo "   ✓ /var/log/journal existe"
-    echo "   Tamaño: $(du -sh /var/log/journal | cut -f1)"
+    SIZE=$(du -sh /var/log/journal 2>/dev/null | cut -f1)
+    echo "   ✓ /var/log/journal existe" | tee -a "$LOG_FILE"
+    echo "   Tamaño: $SIZE" | tee -a "$LOG_FILE"
 else
-    echo "   ✗ /var/log/journal NO existe"
+    echo "   ✗ /var/log/journal NO existe" | tee -a "$LOG_FILE"
 fi
 
-echo ""
-echo "5. Probando rsync simple..."
+echo "" | tee -a "$LOG_FILE"
+echo "5. Probando rsync simple..." | tee -a "$LOG_FILE"
+TEST_DIR="/root/project/backup/test"
 mkdir -p "$TEST_DIR"
+
 if rsync -av /etc/hostname "$TEST_DIR/" >> "$LOG_FILE" 2>&1; then
-    echo "   ✓ rsync funciona correctamente"
-    ls -lh "$TEST_DIR/hostname"
+    echo "   ✓ rsync funciona correctamente" | tee -a "$LOG_FILE"
+    if [ -f "$TEST_DIR/hostname" ]; then
+        echo "   ✓ Archivo copiado: $(ls -lh $TEST_DIR/hostname | awk '{print $5}')" | tee -a "$LOG_FILE"
+    fi
 else
-    echo "   ✗ rsync falló"
+    echo "   ✗ rsync falló" | tee -a "$LOG_FILE"
 fi
 
+echo "" | tee -a "$LOG_FILE"
+echo "6. Estructura de directorios de backup:" | tee -a "$LOG_FILE"
+tree -L 2 /root/project/backup/ 2>/dev/null | tee -a "$LOG_FILE" || find /root/project/backup/ -type d | head -20 | tee -a "$LOG_FILE"
+
+echo "" | tee -a "$LOG_FILE"
+echo "7. Últimas 10 líneas del log:" | tee -a "$LOG_FILE"
+tail -10 "$LOG_FILE"
+
+echo "" | tee -a "$LOG_FILE"
+echo "=== Test completado ===" | tee -a "$LOG_FILE"
 echo ""
 echo "6. Contenido del log:"
 tail -20 "$LOG_FILE"
