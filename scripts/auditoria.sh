@@ -32,11 +32,9 @@ opciones(){
         0) salir ;;
         *) echo "Opcion invalida" ;;
     esac
-
-    if true; then
-        echo ""
-        read -p "Presiona ENTER para volver al menu..."
-    fi
+        
+    echo ""
+    read -p "Presiona ENTER para volver al menu..."
 }
 
 usuarios_presentes(){
