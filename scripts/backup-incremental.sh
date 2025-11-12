@@ -1,12 +1,13 @@
 #!/bin/bash
 
-destino_backup_bd="/home/root/backup/daily/BD"
-origen_backup_bd="/var/lib/mysql/CoopHogar"
+origen_backup_bd="/var/lib/mysql"
+destino_backup_bd="/home/root/project/backup/daily/BD"
+
 origen_dir_logs="/var/log/journal"
-destino_backup_logs="/home/root/backup/daily/logs"
+destino_backup_logs="/home/root/project/backup/daily/logs"
+
 DATE=$(date +%Y%m%d_%H%M%S)
-LOG_FILE="/home/root/backup/backup.log"
-Backup_exitoso=0
+LOG_FILE="/home/root/project/backup/backup.log"
 
 mysqlEstaActivo() {
     if systemctl is-active --quiet mysql; then
@@ -17,6 +18,11 @@ mysqlEstaActivo() {
 }
 
 Backup_bd() {
+    Backup_bd_local
+    Backup_bd_remoto
+}
+
+Backup_bd_local(){
     backup_dir_bd="$destino_backup_bd/$DATE"
     mkdir -p "$backup_dir_bd"
     
@@ -27,6 +33,10 @@ Backup_bd() {
         echo "$(date): Backup incremental BD fallido" >> "$LOG_FILE"
         return 1
     fi
+}
+
+Backup_bd_remoto(){
+
 }
 
 Backup_logs() {
@@ -52,5 +62,6 @@ else
     Backup_logs
 fi
 
-echo "$(date): Backup incremental realizado el $DATE" >> "$LOG_FILE"
+echo "Backup INCREMENTAL realizado el $DATE" >> "$LOG_FILE"
+
 
