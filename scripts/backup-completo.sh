@@ -49,7 +49,7 @@ if mysqlEstaActivo; then
     Backup_logs
     systemctl start mysql
 else
-    Backup_bd
+    Backup_bd_local
     Backup_logs
 fi
 
