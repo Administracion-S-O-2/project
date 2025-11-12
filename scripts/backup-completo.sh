@@ -17,11 +17,6 @@ mysqlEstaActivo() {
     fi
 }
 
-Backup_bd() {
-    Backup_bd_local
-    Backup_bd_remoto
-}
-
 Backup_bd_local(){
     backup_dir_bd="$destino_backup_bd/$DATE"
     mkdir -p "$backup_dir_bd"
@@ -33,10 +28,6 @@ Backup_bd_local(){
         echo "$(date): Backup incremental BD fallido" >> "$LOG_FILE"
         return 1
     fi
-}
-
-Backup_bd_remoto(){
-
 }
 
 Backup_logs() {
@@ -54,7 +45,7 @@ Backup_logs() {
 
 if mysqlEstaActivo; then
     systemctl stop mysql
-    Backup_bd
+    Backup_bd_local
     Backup_logs
     systemctl start mysql
 else
