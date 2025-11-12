@@ -1,57 +1,71 @@
 #!/bin/bash
 
-destino_backup_bd="/root/project/backup/monthly/BD"
-origen_backup_bd="/var/lib/mysql"
-
-destino_backup_logs="/root/project/backup/monthly/logs"
-origen_dir_logs="/var/log/journal"
-
 DATE=$(date +%Y%m%d_%H%M%S)
 LOG_FILE="/root/project/backup/backup.log"
 
+mkdir -p "$(dirname "$LOG_FILE")"
+
+log_msg() {
+    echo "$(date '+%Y-%m-%d %H:%M:%S') - $1" | tee -a "$LOG_FILE"
+}
+
+log_msg "========================================="
+log_msg "Iniciando backup DIFERENCIAL"
+log_msg "========================================="
+
 mysqlEstaActivo() {
-    if systemctl is-active --quiet mysql; then
-        return 0
-    else
-        return 1
-    fi
+    systemctl is-active --quiet mysqld 2>/dev/null
 }
 
-Backup_bd() {
-    backup_dir_bd="$destino_backup_bd/$DATE"
-    mkdir -p "$backup_dir_bd"
-
-    if rsync -av --delete --progress "$origen_backup_bd/" "$backup_dir_bd/" 2>&1; then
-        echo "$(date): Backup diferencial BD exitoso en $backup_dir_bd" >> "$LOG_FILE"
-        return 0
-    else
-        echo "$(date): Backup diferencial BD fallido" >> "$LOG_FILE"
-        return 1
-    fi
-}
-
-Backup_logs() {
-    backup_dir_logs="$destino_backup_logs/$DATE"
-    mkdir -p "$backup_dir_logs"
+Backup_bd_diferencial() {
+    local destino="/root/project/backup/monthly/BD/$DATE"
+    mkdir -p "$destino"
     
-    if rsync -av --delete --progress "$origen_dir_logs/" "$backup_dir_logs/" 2>&1; then
-        echo "$(date): Backup diferencial logs exitoso en $backup_dir_logs" >> "$LOG_FILE"
+    log_msg "Respaldando MySQL diferencial..."
+    
+    if rsync -av --delete /var/lib/mysql/ "$destino/" 2>&1 | tee -a "$LOG_FILE" | tail -5; then
+        local size=$(du -sh "$destino" 2>/dev/null | cut -f1)
+        log_msg "✓ Backup BD diferencial exitoso - Tamaño: $size"
         return 0
     else
-        echo "$(date): Backup diferencial logs fallido" >> "$LOG_FILE"
+        log_msg "✗ Backup BD diferencial fallido"
         return 1
     fi
 }
 
-# Ejecutar backup
+Backup_logs_diferencial() {
+    local destino="/root/project/backup/monthly/logs/$DATE"
+    mkdir -p "$destino"
+    
+    log_msg "Respaldando logs diferencial..."
+    
+    if rsync -av --delete /var/log/journal/ "$destino/" 2>&1 | tee -a "$LOG_FILE" | tail -5; then
+        local size=$(du -sh "$destino" 2>/dev/null | cut -f1)
+        log_msg "✓ Backup logs diferencial exitoso - Tamaño: $size"
+        return 0
+    else
+        log_msg "✗ Backup logs diferencial fallido"
+        return 1
+    fi
+}
+
 if mysqlEstaActivo; then
-    systemctl stop mysql
-    Backup_bd
-    Backup_logs
-    systemctl start mysql
+    log_msg "MySQL activo - Deteniendo servicio..."
+    systemctl stop mysqld
+    sleep 2
+    
+    Backup_bd_diferencial
+    Backup_logs_diferencial
+    
+    log_msg "Reiniciando MySQL..."
+    systemctl start mysqld
+    sleep 2
+    log_msg "✓ MySQL reiniciado"
 else
-    Backup_bd
-    Backup_logs
+    Backup_bd_diferencial
+    Backup_logs_diferencial
 fi
 
-echo "Backup DIFERENCIAL realizado el $DATE" >> "$LOG_FILE"
+log_msg "========================================="
+log_msg "Backup DIFERENCIAL completado"
+log_msg ""
