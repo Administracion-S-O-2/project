@@ -1,13 +1,13 @@
 #!/bin/bash
 
 origen_backup_bd="/var/lib/mysql"
-destino_backup_bd="/home/root/project/backup/daily/BD"
+destino_backup_bd="/root/project/backup/daily/BD"
 
 origen_dir_logs="/var/log/journal"
-destino_backup_logs="/home/root/project/backup/daily/logs"
+destino_backup_logs="/root/project/backup/daily/logs"
 
 DATE=$(date +%Y%m%d_%H%M%S)
-LOG_FILE="/home/root/project/backup/backup.log"
+LOG_FILE="/root/project/backup/backup.log"
 
 mysqlEstaActivo() {
     if systemctl is-active --quiet mysql; then
