@@ -1,0 +1,264 @@
+body {
+    font-family: Arial, Helvetica, sans-serif;
+    margin: 0;
+    overflow: hidden;
+}
+
+.card {
+    border: none;
+    background: #FAFAFA;
+}
+
+h1 {
+    font-size: 1.8rem;
+    font-weight: bold;
+    color: #333;
+}
+
+#boton {
+    font-weight: bold;
+}
+
+#boton:hover {
+    background-color: #333;
+}
+
+.alert {
+    font-size: 0.9rem;
+    padding: 0.75rem 1rem;
+}
+
+aside {
+    border-right: 1px solid #ddd;
+}
+
+footer {
+    position: static;
+    bottom: 0;
+    width: 100%;
+}
+
+.card.shadow-lg.p-4.rounded-4 {
+    max-width: 400px;
+    width: 100%;
+}
+
+.navbar.navbar-expand-lg.navbar-dark.bg-primary {
+    background-color: #4B795A !important;
+    font-weight: bold;
+    font-family: 'Montserrat', Arial, Helvetica, sans-serif;
+    font-weight: 600;
+}
+
+.nav-bg-color-green{
+    background-color: #4B795A;
+}
+
+.btn.btn-primary {
+    background-color: #4B795A;
+    border-color: #4B795A;
+}
+
+.btn.btn-primary:hover {
+    background-color: #3e6b4f;
+    border-color: #3e6b4f;
+}
+
+#background-carousel {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.carousel-image {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background-size: cover;
+    background-position: center;
+    opacity: 0;
+    transition: opacity 2s ease-in-out;
+}
+
+.carousel-image.active {
+    opacity: 1;
+}
+
+.noticia {
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+}
+
+.noticia:hover {
+    transform: scale(1.02);
+}
+
+.noticia img {
+    width: 100%;
+    height: 180px;
+    object-fit: cover;
+}
+
+.noticia .contenido {
+    padding: 15px;
+}
+
+.noticia .contenido h5 {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.noticia .contenido p {
+    color: #555;
+    font-size: 0.95rem;
+    margin-bottom: 0;
+}
+
+.novedades-scroll {
+    display: flex;
+    flex-direction: column;
+    gap: 30px;
+    max-height: 70vh;
+    overflow-y: auto;
+    scroll-behavior: smooth;
+    padding-right: 10px;
+}
+
+.novedades-scroll::-webkit-scrollbar {
+    width: 8px;
+}
+
+.novedades-scroll::-webkit-scrollbar-thumb {
+    background-color: #ccc;
+    border-radius: 10px;
+}
+
+.noticia {
+    background-color: #fff;
+    border-radius: 20px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 0.3s ease;
+    min-height: 450px;
+    display: flex;
+    flex-direction: column;
+}
+
+.noticia:hover {
+    transform: scale(1.01);
+}
+
+.noticia img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.noticia .contenido {
+    flex: 1;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.noticia .contenido h5 {
+    font-weight: bold;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.noticia .contenido p {
+    color: #555;
+    font-size: 1rem;
+}
+
+.modo-oscuro {
+    background-color: #121212 !important;
+    color: #e0e0e0 !important;
+}
+
+.modo-oscuro .navbar.navbar-expand-lg.navbar-dark.bg-primary {
+    background-color: #2e4b3a !important;
+}
+
+.modo-oscuro aside {
+    background-color: #1e1e1e !important;
+    border-color: #333 !important;
+}
+
+.modo-oscuro .nav-link {
+    color: #ccc !important;
+}
+
+.modo-oscuro .nav-link.fw-bold {
+    color: #fff !important;
+}
+
+.modo-oscuro main {
+    background-color: #121212 !important;
+}
+
+.modo-oscuro .card,
+.modo-oscuro .configuracion-card {
+    background-color: #1e1e1e !important;
+    color: #e0e0e0 !important;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.6) !important;
+}
+
+.modo-oscuro .btn.btn-primary {
+    background-color: #3a5e47 !important;
+    border-color: #3a5e47 !important;
+}
+
+.modo-oscuro .btn.btn-primary:hover {
+    background-color: #324d3c !important;
+}
+
+.modo-oscuro footer {
+    background-color: #000 !important;
+    color: #aaa !important;
+}
+
+.modo-oscuro .alert {
+    background-color: #2c2c2c !important;
+    border-color: #444 !important;
+    color: #f0f0f0 !important;
+}
+
+h1.fw-bold {
+    color: #222;
+    transition: color 0.3s ease;
+}
+
+.fw-bold {
+    color: #222;
+    transition: color 0.3s ease;
+}
+
+
+html.modo-oscuro h1.fw-bold,
+html.modo-oscuro .fw-bold {
+    color: #ffffff;
+}
+
+h1.fw-bold,
+.fw-bold,
+.form-label {
+    color: #222;
+    transition: color 0.3s ease;
+}
+
+html.modo-oscuro h1.fw-bold,
+html.modo-oscuro .fw-bold,
+html.modo-oscuro .form-label {
+    color: #ffffff;
+}

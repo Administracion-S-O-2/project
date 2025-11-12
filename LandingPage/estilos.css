@@ -1,0 +1,99 @@
+*{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    --gren: #4C795A;
+    --darkGrenn: #335c40;
+    --secundario: #B5B4C2;
+}
+
+html{
+    scroll-behavior: smooth;
+}
+
+body {
+    font-family: 'Open Sans', sans-serif;
+    font-weight: 400;
+}
+
+h1, h2, h3, h4, h5, h6, header, footer{
+    font-family: 'Montserrat', sans-serif;
+    font-weight: 700;
+}
+
+.bg-color-gren{
+    background-color: var(--gren);
+}
+
+.centrado {
+    width: 80%;
+    margin: 0 auto;
+}
+
+.borde-blanco{
+    border: 2px solid white;
+}
+
+.bg-color-darkGren{
+    background-color: var(--darkGrenn);
+}
+
+img{
+    width: 75%;
+    height: auto;
+    background-color: black;
+}
+
+#hero{
+    background-image: url("img/Construccion.jpg");
+    background-position: center;
+    background-size: cover;
+    height: 50vh;
+    color: rgb(238, 237, 237);
+    text-shadow: 1px 1px 3px rgba(0, 0, 0, 0.8);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+        filter: brightness(0.8) contrast(1.1);
+}
+
+#solicitudRegistro{
+    min-height: 85vh; 
+}
+
+#solicitudRegistro button:hover{
+    background-color: var(--gren);
+
+}
+
+#nosotros{
+    min-height: 40.3vh; 
+}
+
+#obras img{
+    filter: brightness(0.8) contrast(1.1);
+    box-shadow: 
+        inset 0 0 100px rgba(0, 0, 0, 0.6),
+        0 8px 32px rgba(0, 0, 0, 0.3);
+    height: 40%;
+}
+
+#idTextoHero{
+    text-shadow: none;
+    color: white;
+}
+
+
+a{
+    text-decoration: none;
+}
+
+header a{
+    color: white;
+}
+
+header a:hover{
+    color: var(--secundario);
+}
+
+footer{
+    color: white;
+}

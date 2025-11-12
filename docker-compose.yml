@@ -1,0 +1,101 @@
+name: cooperativa
+
+services:
+  db:
+    image: mysql:8.0
+    container_name: cooperativa-db
+    environment:
+      MYSQL_DATABASE: 'Digitality'
+      MYSQL_USER: 'cooperativa_user'
+      MYSQL_PASSWORD: /run/secrets/db_password
+      MYSQL_ROOT_PASSWORD: /run/secrets/db_root_password
+    ports:
+      - 3307:3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - cooperativa-network
+    secrets:
+      - db_password
+      - db_root_password
+
+  # landing-page:
+  #   image: serversideup/php:8.4-fpm-nginx
+  #   container_name: LandingPage
+  #   ports:
+  #     - 8080:80
+  #   environment:
+  #     - SSL_MODE: "off"
+  #   volumes:
+  #     - ./LandingPage:/var/www/html
+  #   networks:
+  #     - cooperativa-network
+  #   secrets:
+  #     - db_password
+
+  # usuarios-cooperativa:
+  #   image: serversideup/php:8.4-fpm-nginx
+  #   container_name: UsuariosDeLaCooperativa
+  #   ports:
+  #     - 8001:80
+  #   volumes:
+  #     - ./UsuariosDeLaCooperativa:/var/www/html
+  #   networks:
+  #     - cooperativa-network
+  #   secrets:
+  #     - db_password
+
+  # api-usuarios:
+  #   image: serversideup/php:8.4-fpm-nginx
+  #   container_name: APIDeUsuarios
+  #   volumes:
+  #     - ./APIDeUsuarios:/var/www/html
+  #   ports: 
+  #     - 8000:80
+  #   environment:
+  #     - SSL_MODE: "off"
+  #   networks:
+  #     - cooperativa-network
+  #   secrets:
+  #     - db_password
+      
+  # backoffice:
+  #   image: serversideup/php:8.4-fpm-nginx
+  #   container_name: BackOffice
+  #   volumes:
+  #     - ./BackOffice:/var/www/html
+  #   ports: 
+  #     - 8002:80
+  #   environment:
+  #     - SSL_MODE: "off"
+  #   networks:
+  #     - cooperativa-network
+  #   secrets:
+  #     - db_password
+  
+  api-cooperativa:
+    image: serversideup/php:8.4-fpm-nginx
+    container_name: APIDeCooperativa
+    volumes:
+      - ./APIDeCooperativa:/var/www/html
+    ports: 
+      - 8001:80
+    environment:
+      SSL_MODE: "off"
+    networks:
+      - cooperativa-network
+    secrets:
+      - db_password
+
+networks:
+  cooperativa-network:
+    driver: bridge
+
+secrets:
+  db_password:
+    file: ./secrets/db_password.txt
+  db_root_password:
+    file: ./secrets/db_root_password.txt
+
+volumes:
+  mysql-data:

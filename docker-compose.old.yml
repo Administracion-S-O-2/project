@@ -1,0 +1,53 @@
+name: cooperativa
+
+services:
+  db:
+    image: mysql:8.0
+    environment:
+      MYSQL_DATABASE: 'Digitality'
+      MYSQL_USER: 'cooperativa_user'
+      MYSQL_PASSWORD: ''
+      MYSQL_ROOT_PASSWORD: 'root'
+    ports:
+      - "3307:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - cooperativa-network
+
+  landing-page:
+    image: nginx:latest
+    container_name: LandingPage
+    ports:
+      - "8080:80"
+    volumes:
+      - ./LandingPage:/usr/share/nginx/html
+    networks:
+      - cooperativa-network
+
+  usuarios-cooperativa:
+    image: nginx:latest
+    ports:
+      - "8081:81"
+    volumes:
+      - ./UsuariosDeLaCooperativa:/usr/share/nginx/html
+    networks:
+      - cooperativa-network
+
+  api-usuarios:
+    image: serversideup/php:8.4-fpm-nginx
+    volumes:
+      - ./APIDeUsuarios:/var/www/html
+    ports: 
+      - 8000:80
+    environment:
+      SSL_MODE: "off"
+    networks:
+      - cooperativa-network
+
+networks:
+  cooperativa-network:
+    driver: bridge
+
+volumes:
+  mysql-data:

@@ -1,0 +1,8 @@
+# Respaldo Diario - Todos los días a las 2:00 AM
+0 2 * * * root /home/root/scripts/backup-diario.sh
+
+# Respaldo Semanal - Domingos a medianoche (00:00)
+0 0 * * 0 root /home/root/scripts/backup-semanal.sh
+
+# Respaldo Mensual - Primer día del mes a las 3:00 AM
+0 3 1 * * root /home/root/scripts/backup-mensual.sh
