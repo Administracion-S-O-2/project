@@ -1,8 +1,8 @@
+name: cooperativa
+
 services:
-  
   db:
     image: mysql:8.0
-    container_name: CooperativaDB
     environment:
       MYSQL_DATABASE: 'Digitality'
       MYSQL_USER: 'cooperativa_user'
@@ -21,88 +21,33 @@ services:
     ports:
       - "8080:80"
     volumes:
-      - /root/LandingPage:/usr/share/nginx/html
+      - ./LandingPage:/usr/share/nginx/html
+    networks:
+      - cooperativa-network
+
+  usuarios-cooperativa:
+    image: nginx:latest
+    ports:
+      - "8081:81"
+    volumes:
+      - ./UsuariosDeLaCooperativa:/usr/share/nginx/html
     networks:
       - cooperativa-network
 
   api-usuarios:
-    image: webdevops/php-nginx:8.2
-    container_name: APIDeUsuarios
-    working_dir: /app                           
-    ports:
-      - "8000:8000"
+    image: serversideup/php:8.4-fpm-nginx
     volumes:
-      - /root/APIDeUsuarios:/app               
+      - ./APIDeUsuarios:/var/www/html
+    ports: 
+      - 8000:80
     environment:
-      WEB_DOCUMENT_ROOT: /app/public
-      DB_CONNECTION: mysql
-      DB_HOST: db
-      DB_PORT: 3306
-      DB_DATABASE: 'Digitality'
-      DB_USERNAME: 'APIDeUsuarios'
-      DB_PASSWORD: '12345678'
-    depends_on:
-      - db
+      SSL_MODE: "off"
     networks:
       - cooperativa-network
-    command: php artisan serve --host=0.0.0.0 --port=8000
-
-  api-cooperativa:
-    image: php:8.2-cli
-    container_name: APIDeCooperativa
-    working_dir: /var/www                       
-    ports:
-      - "8001:8001"
-    volumes:
-      - /root/APIDeCooperativa:/var/www        
-    environment:
-      DB_CONNECTION: mysql
-      DB_HOST: db
-      DB_PORT: 3306
-      DB_DATABASE: 'Digitality'
-      DB_USERNAME: 'APIDeCooperativa'
-      DB_PASSWORD: '12345678'
-    depends_on:
-      - db
-    networks:
-      - cooperativa-network
-    command: php artisan serve --host=0.0.0.0 --port=8001
-
-  usuarios-cooperativa:
-    image: nginx:latest
-    container_name: UsuariosDeLaCooperativa
-    ports:
-      - "8081:80"
-    volumes:
-      - /root/UsuariosDeLaCooperativa:/usr/share/nginx/html
-    networks:
-      - cooperativa-network
-      
-  backoffice:
-    image: webdevops/php-nginx:8.2
-    container_name: backoffice
-    working_dir: /app              
-    ports:
-      - "8002:8002"
-    volumes:
-      - /root/BackOffice:/app          
-    environment:
-      WEB_DOCUMENT_ROOT: /app/public
-      DB_CONNECTION: mysql
-      DB_HOST: db
-      DB_PORT: 3306
-      DB_DATABASE: 'Digitality'
-      DB_USERNAME: 'Backoffice'
-      DB_PASSWORD: '12345678'
-    depends_on:
-      - db
-    networks:
-      - cooperativa-network
-    command: php artisan serve --host=0.0.0.0 --port=8002
-
-volumes:
-  mysql-data:
 
 networks:
   cooperativa-network:
     driver: bridge
+
+volumes:
+  mysql-data:
